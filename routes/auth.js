@@ -2,6 +2,8 @@ const router = require('express').Router();
 const User = require('../models/User');
 const { registerValidation, loginValidation } = require('../validation');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const verifyToken = require('./verifyToken');
 
 
 router.get('/', async (req, res) => {
@@ -35,14 +37,15 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/delete', verifyToken, async (req, res) => {
+
     await User.deleteMany({ _id: req.body.id }, (err, result) => {
         if (err)
             res.status(400).send(err);
         else
             res.send(result);
     });
-})
+});
 
 router.post('/login', async (req, res) => {
 
@@ -57,7 +60,10 @@ router.post('/login', async (req, res) => {
     if (!validPass)
         res.status(204).send('Password is wrong!');
 
-    res.send(user._id);
+    // create jwt
+    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+
+    res.header('auth-token', token).send(token);
 });
 
 module.exports = router;

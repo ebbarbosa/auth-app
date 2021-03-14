@@ -13,9 +13,7 @@ app.use(express.json());
 mongoose.connect(process.env.DB_CONNECT, 
 { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log('Connected to DB!'));
 
-
 // Routes
 app.use('/api/user', authRouter);
-app.use('/api/token')
 
 app.listen(3000, () => console.log('Server up and running on port 3000...'));
