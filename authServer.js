@@ -13,6 +13,6 @@ mongoose.connect(process.env.DB_CONNECT,
 { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log('Connected to DB!'));
 
 // Routes
-app.use('/api', authRouter);
+app.use('/auth', authRouter);
 
 app.listen(process.env.PORT_AUTH, () => console.log(`Server up and running on port ${process.env.PORT_AUTH}...`));

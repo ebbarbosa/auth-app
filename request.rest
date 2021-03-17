@@ -1,5 +1,5 @@
 # register a user 
-POST http://localhost:4000/api/register 
+POST http://localhost:4000/auth/register 
 Content-Type: application/json
 
 {
@@ -9,13 +9,24 @@ Content-Type: application/json
 }
 
 ###
+# register another user 
+POST http://localhost:4000/auth/register 
+Content-Type: application/json
+
+{
+    "name": "Eduardo",
+    "email": "eduardo@another.pt",
+    "password": "teste@321"
+}
+
+###
 # get all users
-GET http://localhost:4000/api/users
+GET http://localhost:4000/auth/users
 
 
 ###
 # login a registered user and receive access token expires in 15s and refresh token 
-POST http://localhost:4000/api/login
+POST http://localhost:4000/auth/login
 Content-Type: application/json
 
 {
@@ -25,43 +36,46 @@ Content-Type: application/json
 
 ###
 # login another registered user and receive access token expires in 15s and refresh token 
-POST http://localhost:4000/api/login
+POST http://localhost:4000/auth/login
 Content-Type: application/json
 
 {
-    "email": "eduardo@some3.pt",
+    "email": "eduardo@another.pt",
     "password": "teste@321"
 }
 
 ###
+# to test this request, copy the refreshed token received from the login
 # refreshes a user access token with the refresh token
-POST http://localhost:4000/api/token
+POST http://localhost:4000/auth/token
 Content-Type: application/json
 
 {
-    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNGQ3NDNiZjQ5NDYwNDNkZjZjYWIyNiIsIm5hbWUiOiJFZHVhcmRvIiwiaWF0IjoxNjE1OTQyNzg4fQ.I6zsrSVKRYtL8GMGbsnVqNMRi-Kz3tcqWX3DPKdZ9j8"
+    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNTE1OGUyNmY4MzE0NmM3YTZiZTM5NiIsIm5hbWUiOiJBbnRvbmlvIiwiaWF0IjoxNjE1OTQ0MjkwfQ.QKbzJKHTKHrOF64a0ozdhEV5dOo1WQKXxaZwGV2sNOE"
 }
 
 ###
+# to test this request, copy the access token received from the login or from the token post
 # gets the user posts based on the access token passed in the authorization header 
 GET http://localhost:3000/api/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNTE1NDM4MjRmZWM3NmJlMDlmYjdkZCIsIm5hbWUiOiJBbnRvbmlvIiwiaWF0IjoxNjE1OTQzNDcwLCJleHAiOjE2MTU5NDM1MDB9.mWTG8k7vhSs0tXqIVH9hCjCdQWZlBiKf2RnuVwMRRkE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNTE1OGUyNmY4MzE0NmM3YTZiZTM5NiIsIm5hbWUiOiJBbnRvbmlvIiwiaWF0IjoxNjE1OTQ0MzY3LCJleHAiOjE2MTU5NDQzOTd9.Jez8pVNv1uW_FNcRsRK8YkiM7Lr-yysofZyZkQ0y5CE
 Content-Type: application/json
 
 ###
+# to test this request, copy the refresh token received from the login or from the token post
 # logs out a registered user by deleting its refresh token from the db, once the access token expires it can no longer
 # use the refresh token to get a new access token, the user needs to log in again.
-DELETE http://localhost:4000/api/logout
+DELETE http://localhost:4000/auth/logout
 Content-Type: application/json
 
 {
-    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNGQ3NDNiZjQ5NDYwNDNkZjZjYWIyNiIsIm5hbWUiOiJFZHVhcmRvIiwiaWF0IjoxNjE1OTQyNzg4fQ.I6zsrSVKRYtL8GMGbsnVqNMRi-Kz3tcqWX3DPKdZ9j8"
+    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNTE1OGUyNmY4MzE0NmM3YTZiZTM5NiIsIm5hbWUiOiJBbnRvbmlvIiwiaWF0IjoxNjE1OTQ0MjkwfQ.QKbzJKHTKHrOF64a0ozdhEV5dOo1WQKXxaZwGV2sNOE"
 }
 
 ###
 # posts a new post for the user in the jwt access token passed in the header
 POST http://localhost:3000/api/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNTE1NDM4MjRmZWM3NmJlMDlmYjdkZCIsIm5hbWUiOiJBbnRvbmlvIiwiaWF0IjoxNjE1OTQzNDcwLCJleHAiOjE2MTU5NDM1MDB9.mWTG8k7vhSs0tXqIVH9hCjCdQWZlBiKf2RnuVwMRRkE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNTE1OTFlNmY4MzE0NmM3YTZiZTM5NyIsIm5hbWUiOiJFZHVhcmRvIiwiaWF0IjoxNjE1OTQ0MTMzLCJleHAiOjE2MTU5NDQxNjN9._vS5Ch-39AQN0WGOElFrj2Ct6kTBx4IHbdQEzQbJJFs
 Content-Type: application/json
 
 {
