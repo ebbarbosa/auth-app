@@ -1,0 +1,55 @@
+POST http://localhost:3000/api/user/register
+Content-Type: application/json
+
+{
+    "name": "Eduardo",
+    "email": "eduardo@some4.pt",
+    "password": "teste@123"
+}
+
+###
+GET http://localhost:3000/api/user
+
+
+###
+POST http://localhost:3000/api/user/login
+Content-Type: application/json
+
+{
+    "email": "eduardo@some3.pt",
+    "password": "teste@321"
+}
+
+###
+
+POST http://localhost:3000/api/user/token
+Content-Type: application/json
+
+{
+    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNGQ3NDNiZjQ5NDYwNDNkZjZjYWIyNiIsIm5hbWUiOiJFZHVhcmRvIiwiaWF0IjoxNjE1OTQwODkxfQ.V-8x2NAySl2vvQMPLH1BAGQkYFy3L7ZUCwg2nj_PbVs"
+}
+
+###
+GET http://localhost:3000/api/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNGQ3NDNiZjQ5NDYwNDNkZjZjYWIyNiIsIm5hbWUiOiJFZHVhcmRvIiwiaWF0IjoxNjE1OTQwODkxLCJleHAiOjE2MTU5NDA5MjF9.K4kHjjJJGOrFnibGuWXbUHl8Puthx9gl1ugc1By2XCc
+Content-Type: application/json
+
+###
+DELETE http://localhost:3000/api/user/logout
+Content-Type: application/json
+
+{
+    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNGQ3NDNiZjQ5NDYwNDNkZjZjYWIyNiIsIm5hbWUiOiJFZHVhcmRvIiwiaWF0IjoxNjE1OTQwODkxfQ.V-8x2NAySl2vvQMPLH1BAGQkYFy3L7ZUCwg2nj_PbVs"
+}
+
+###
+
+POST http://localhost:3000/api/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNGQ3NDNiZjQ5NDYwNDNkZjZjYWIyNiIsIm5hbWUiOiJFZHVhcmRvIiwiaWF0IjoxNjE1OTM4MTA1LCJleHAiOjE2MTU5MzgxMzV9.8UvAaljUKGzTNRCgABoqF98d0GzOqnmBxUbOZEfKo1U
+Content-Type: application/json
+
+{
+    "message": "my post 2"
+}
+
+

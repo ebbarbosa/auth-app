@@ -1,10 +1,12 @@
-const router = require('express').Router();
+const express = require('express');
+const router = module.exports = express()
 const User = require('../models/User');
 const { registerValidation, loginValidation } = require('../validation');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const verifyToken = require('./verifyToken');
-
+const verifyToken = require('../verifyToken');
+const { saveToken, findToken, deleteToken } = require('../tokenRepo');
+const Token = require('../models/Token');
 
 router.get('/', async (req, res) => {
     const users = await User.find();
@@ -39,7 +41,7 @@ router.post('/register', async (req, res) => {
 
 router.delete('/delete', verifyToken, async (req, res) => {
 
-    await User.deleteMany({ _id: req.body.id }, (err, result) => {
+    await User.deleteMany({ _id: req.user._id }, (err, result) => {
         if (err)
             res.status(400).send(err);
         else
@@ -58,12 +60,43 @@ router.post('/login', async (req, res) => {
 
     const validPass = await bcrypt.compare(req.body.password, user.password);
     if (!validPass)
-        res.status(204).send('Password is wrong!');
+        return res.status(401).send('Password is wrong!');
 
     // create jwt
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+    let userJwt = { id: user.id, name: user.name }
+    const accessToken = generateAccessToken(userJwt)
+    const refreshToken = jwt.sign(userJwt, process.env.REFRESH_TOKEN_SECRET);
 
-    res.header('auth-token', token).send(token);
+    saveToken(refreshToken)
+
+    res.json({ accessTokes: accessToken, refreshToken: refreshToken });
+});
+
+function generateAccessToken(user) {
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30s' })
+}
+
+router.post('/token', async (req, res) => {
+
+    // destroy jwt refresh token
+    const refreshToken = req.body.token
+
+    if (refreshToken == null) return res.sendStatus(401)
+    const storedToken = await findToken(refreshToken)
+    if (storedToken == null) return res.sendStatus(403)
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403)
+        const accessToken = generateAccessToken({ id: user.id, name: user.name })
+        return res.json({ accessToken: accessToken })
+    })
+
+});
+
+router.delete('/logout', async (req, res) => {
+
+    // destroy jwt refresh token stored in mongodb
+    deleteToken(req.body.token)
+    res.status(200).send('User logged out');
 });
 
 module.exports = router;

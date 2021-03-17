@@ -1,10 +1,10 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 const authRouter = require('./routes/auth');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const postsRouter = require('./routes/posts');
 
 // Middleware
 app.use(express.json());
@@ -15,5 +15,6 @@ mongoose.connect(process.env.DB_CONNECT,
 
 // Routes
 app.use('/api/user', authRouter);
+app.use('/api/posts', postsRouter);
 
 app.listen(process.env.PORT, () => console.log(`Server up and running on port ${process.env.PORT}...`));

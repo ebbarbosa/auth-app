@@ -1,14 +1,6 @@
 //Validation
 const joi = require('joi');
 
-/*     // Validate user async
-    try {
-        const validation = await schema.validateAsync(req.body);
-        res.send(validation);
-    } catch (error) {
-        res.send(error);
-    } */
-
 const registerValidation = data => {
     const schema = joi.object({
         name: joi.string().max(255).min(6).required(),
@@ -28,6 +20,16 @@ const loginValidation = (data) => {
     return schema.validate(data);
 };
 
+const postValidation = (data) => {
+    const schema = joi.object({
+        message: joi.string().min(6).max(12*1024).required()
+    });
+
+    return schema.validate(data);
+};
+
+
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
+module.exports.postValidation = postValidation;
 
