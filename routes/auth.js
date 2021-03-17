@@ -1,14 +1,14 @@
 const express = require('express');
 const router = module.exports = express()
 const User = require('../models/User');
-const { registerValidation, loginValidation } = require('../validation');
+const { registerValidation, loginValidation } = require('../validations/validation');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const verifyToken = require('../verifyToken');
-const { saveToken, findToken, deleteToken } = require('../tokenRepo');
+const verifyToken = require('../validations/verifyToken');
+const { saveToken, findToken, deleteToken } = require('../repositories/tokenRepo');
 const Token = require('../models/Token');
 
-router.get('/', async (req, res) => {
+router.get('/users', async (req, res) => {
     const users = await User.find();
     res.send(users);
 })

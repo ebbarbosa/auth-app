@@ -1,4 +1,4 @@
-const Token = require('./models/Token')
+const Token = require('../models/Token')
 
 module.exports.saveToken = async (token) => {
 

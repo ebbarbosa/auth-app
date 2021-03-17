@@ -14,7 +14,6 @@ mongoose.connect(process.env.DB_CONNECT,
 { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log('Connected to DB!'));
 
 // Routes
-app.use('/api/user', authRouter);
 app.use('/api/posts', postsRouter);
 
 app.listen(process.env.PORT, () => console.log(`Server up and running on port ${process.env.PORT}...`));

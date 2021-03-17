@@ -1,9 +1,9 @@
 const express = require('express');
 const router = module.exports = express()
-const { postValidation } = require('../validation');
+const { postValidation } = require('../validations/validation');
 const Post = require('../models/Post')
 const jwt = require('jsonwebtoken');
-const verifyToken = require('../verifyToken');
+const verifyToken = require('../validations/verifyToken');
 
 router.get('/', verifyToken, async (req, res) => {
 
